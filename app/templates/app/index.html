@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">  <!-- Para responsividad -->
+    <title>Generar Credencial</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilo adicional para aumentar el tamaño de la carta */
+        .card {
+            max-width: 500px; /* Ancho máximo de la carta */
+            margin: auto; /* Centrar la carta */
+            padding: 20px; /* Espaciado interno de la carta */
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+        }
+        .form-label {
+            font-weight: bold; /* Etiquetas en negrita */
+        }
+        .mb-3 {
+            margin-bottom: 1.5rem; /* Más espacio entre los campos */
+        }
+        .btn {
+            padding: 10px 20px; /* Ajuste del tamaño del botón */
+            font-size: 1.1rem; /* Tamaño de fuente del botón */
+        }
+        #preview {
+            max-width: 100%; /* Asegura que la imagen no exceda el ancho del contenedor */
+            margin-top: 10px; /* Espacio superior para la vista previa */
+        }
+    </style>
+</head>
+<body class="bg-light">  <!-- Fondo gris claro -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6">  <!-- Columnas responsivas: más anchas -->
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h1 class="h4 mb-0">Generar Credencial PDF</h1>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <!-- Campo Foto -->
+                            <div class="mb-3">
+                                <label for="{{ form.foto.id_for_label }}" class="form-label">{{ form.foto.label }}</label>
+                                {{ form.foto }}
+                                {% if form.foto.errors %}
+                                    <div class="text-danger">{{ form.foto.errors }}</div>
+                                {% endif %}
+                                <!-- Vista previa de la imagen -->
+                                <img id="preview" src="#" alt="Vista previa de la imagen" style="display:none;">
+                            </div>
+                            <br>
+                            <!-- Campo Nombre Completo -->
+                            <div class="mb-3">
+                                <label for="{{ form.nombre_completo.id_for_label }}" class="form-label">{{ form.nombre_completo.label }}</label>
+                                {{ form.nombre_completo }}
+                                {% if form.nombre_completo.errors %}
+                                    <div class="text-danger">{{ form.nombre_completo.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <br>
+                            <!-- Campo Cargo -->
+                            <div class="mb-3">
+                                <label for="{{ form.cargo.id_for_label }}" class="form-label">{{ form.cargo.label }}</label>
+                                {{ form.cargo }}
+                                {% if form.cargo.errors %}
+                                    <div class="text-danger">{{ form.cargo.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <br>
+                            <!-- Campo País -->
+                            <div class="mb-3">
+                                <label for="{{ form.pais.id_for_label }}" class="form-label">{{ form.pais.label }}</label>
+                                {{ form.pais }}
+                                {% if form.pais.errors %}
+                                    <div class="text-danger">{{ form.pais.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <br>
+                            <!-- Botón -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success btn-lg">Generar PDF</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS (opcional, para componentes interactivos) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // JavaScript para mostrar la vista previa de la imagen
+        document.getElementById('id_foto').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const preview = document.getElementById('preview');
+                preview.src = e.target.result;
+                preview.style.display = 'block'; // Mostrar la imagen
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
